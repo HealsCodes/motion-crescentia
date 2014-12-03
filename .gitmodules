@@ -1,0 +1,5 @@
+[submodule "vendor/calabash-ios-server"]
+	path = vendor/calabash-ios-server
+	url = https://github.com/calabash/calabash-ios-server.git
+	fetchRecurseSubmodules = 1
+
