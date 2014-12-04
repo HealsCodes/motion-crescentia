@@ -6,19 +6,20 @@ Gem::Specification.new do |spec|
   spec.version       = '0.11.4.1'
   spec.authors       = [ 'René Köcher' ]
   spec.email         = [ 'shirk@bitspin.org' ]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
-  spec.license       = ""
+  spec.description   = %q{RubyMotion wrapper for the Calabash BDD framework}
+  spec.summary       = %q{motion-crescentia is an unofficial wrapper around calabash-ios and calabash-cucumber.
+                          It is designed to work with calabash-ios >= 0.11.4 and requires XCode 6.1 or better.}
+  spec.homepage      = 'https://github.com/Shirk/motion-crescentia'
+  spec.license       = 'MIT'
 
   files = []
   files << 'README.md'
   files.concat(Dir.glob('lib/**/*.rb'))
   files.concat(Dir.glob('lib/**/*.a'))
+
   spec.files         = files
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
+  spec.add_dependency( 'calabash-cucumber', '0.11.4' )
   spec.add_development_dependency 'rake'
 end
