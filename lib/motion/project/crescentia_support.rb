@@ -10,7 +10,7 @@ def fixture_install( local_path, target_path, target_root )
   return false unless File.exists? local_path
 
   if File.directory? local_path
-    Dir.glob( File.join( local_path, '**' ) ) do |entry|
+    Dir.glob( File.join( local_path, '**', '*' ) ) do |entry|
       if File.file? entry
         file_target_path = entry.gsub( /^#{local_path}/, target_path )
         backdoor( 'fixture_copy_file:', { :src => entry, :dest_path => file_target_path, :dest_root => target_root } )

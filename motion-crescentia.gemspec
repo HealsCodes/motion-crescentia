@@ -3,8 +3,8 @@ VERSION = '1.0'
 
 Gem::Specification.new do |spec|
   spec.name          = 'motion-crescentia'
-  spec.version       = '0.11.4.2'
-  spec.authors       = [ 'René Köcher' ]
+  spec.version       = '0.11.4.3'
+  spec.authors       = [ 'René Köcher' ]
   spec.email         = [ 'shirk@bitspin.org' ]
   spec.description   = %q{RubyMotion wrapper for the Calabash BDD framework}
   spec.summary       = %q{motion-crescentia is an unofficial wrapper around calabash-ios and calabash-cucumber.
