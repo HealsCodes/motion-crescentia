@@ -45,6 +45,8 @@ namespace :crescentia do
     env
   end
 
+  # Let the user choose from the available simulator targets.
+  # @return [String] The selected simulator target
   def ask_target_name
     App.info( '---', 'No target name given, please choose one:' )
     devices = `instruments -s devices`.split( /\n/ ).grep( /\[[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}\]/ )
