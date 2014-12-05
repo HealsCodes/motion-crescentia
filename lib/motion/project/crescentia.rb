@@ -80,6 +80,10 @@ namespace :crescentia do
     cucumber_env  = setup_env_args( args )
     cucumber_args = ( ENV['args'] || '' ).split( /\s/ )
 
+    if ENV['CUCUMBER_FORMAT']
+      cucumber_args.unshift( '--format', ENV['CUCUMBER_FORMAT'] )
+    end
+
     App.info( 'Run', "calabash-env: #{cucumber_env}" )
     App.info( 'Run', "cucumber #{cucumber_args.to_s}" )
 
