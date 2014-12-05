@@ -5,7 +5,7 @@
 # (does not work on empty directories for now).
 # @param [String] local_path The path to the source file.
 # @param [String] target_path The destination path on the Simulator (may contain directory parts).
-# @param [Symbol] target_root The root path for the file (see #NSSearchPathDirectory).
+# @param [Symbol] target_root The root path for the file (see {NSSearchPathDirectory}).
 def fixture_install( local_path, target_path, target_root )
   return false unless File.exists? local_path
 
@@ -21,9 +21,9 @@ def fixture_install( local_path, target_path, target_root )
   end
 end
 
-# Remove the file or directory at `path` from the Simulator.
+# Remove the file or directory at +path+ from the Simulator.
 # @param [String] path The path to the file or directory on the Simulator.
-# @param [Symbol] root The root path for the file (see #NSSearchPathDirectory).
+# @param [Symbol] root The root path for the file (see {NSSearchPathDirectory}).
 def fixture_remove( path, root )
   backdoor( 'fixture_remove_file:', { :path => path, :root => root } )
 end
