@@ -62,6 +62,51 @@ namespace :crescentia do
     devices[choice]
   end
 
+  # Lookup the UUID matching the specified device name
+  def lookup_uuid( device_name )
+    App.info( 'Run', "Fetching the UUID for '#{device_name}'" )
+    `instruments -s devices`.split( /\n/ ).grep( /\[[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}\]/ ).each do |device|
+      name, uuid = device.split( /[\[\]]/ ).map{ |n| n.strip }
+      if device_name == name
+        return uuid
+      end
+    end
+    return nil
+  end
+
+  # Use +simctl+ to deploy the application on the simulator.
+  # @param [String] target The device_name for the simulator target.
+  # @param [String] app_bundle Path to the .app-bundle.
+  # @param [String] bundle_id The bundle-id used by the application.
+  # @param [Integer] clean If 1 uninstall the application first
+  def push_app( target, app_bundle, bundle_id, clean=0 )
+    simctl = File.join( Motion::Project::App.config.xcode_dir, 'Platforms/iPhoneSimulator.platform/Developer/usr/bin/simctl' )
+    uuid = lookup_uuid( target )
+
+    App.fail( "Unable to lookup the UUID for #{target}!" ) if uuid.nil?
+
+    sh( "#{simctl} shutdown #{uuid} &>/dev/null || true", :verbose => false )
+    sh( "#{simctl} boot     #{uuid} &>/dev/null || true", :verbose => false )
+
+    if clean == 1
+      App.info( 'Run', "Uninstalling #{bundle_id}.." )
+      sh( "#{simctl} uninstall #{uuid} #{bundle_id} &>/dev/null || true", :verbose => false )
+    end
+
+    App.info( 'Run', "Installing #{bundle_id} on #{target}.." )
+    sh( "#{simctl} install #{uuid} #{app_bundle}", :verbose => false )
+    sh( "#{simctl} shutdown #{uuid} &>/dev/null || true", :verbose => false )
+  end
+
+  desc 'Push the app-bundle to the simulator.'
+  task :push, [:target,:clean] do |t, args|
+    env   = setup_env_args( args )
+    clean = ( args[:clean] || ENV['clean'] || 0 ).to_i
+
+    App.fail( ':push is only supported for simulator targets !' ) if env['DEVICE_TARGET'] == 'device'
+    push_app( env['DEVICE_TARGET'], env['APP_BUNDLE_PATH'], env['BUNDLE_ID'], clean )
+  end
+
   desc 'Setup features directory for this project.'
   task :setup do
     App.info( 'Run', 'Creating Calabash-iOS directories..' )
@@ -82,6 +127,10 @@ namespace :crescentia do
 
     if ENV['CUCUMBER_FORMAT']
       cucumber_args.unshift( '--format', ENV['CUCUMBER_FORMAT'] )
+    end
+
+    unless cucumber_env['DEVICE_TARGET'] == 'device'
+      push_app( cucumber_env['DEVICE_TARGET'], cucumber_env['APP_BUNDLE_PATH'], cucumber_env['BUNDLE_ID'], 1 )
     end
 
     App.info( 'Run', "calabash-env: #{cucumber_env}" )

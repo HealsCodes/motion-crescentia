@@ -40,7 +40,7 @@ Or install it yourself as:
 
 ### rake tasks
 
-After following the installation steps there will be three new rake tasks available:
+After following the installation steps there will be four new rake tasks available:
 
 #### crescentia:setup
 
@@ -61,6 +61,14 @@ For a list of available simulator targets run:
 If no target is specified a list of possible targets will be provided to choose from.
 
 **NOTE:** Any additional arguments for `cucumber` can be passed by setting the `args` environment variable.
+
+#### crescentia:push &#91;:target, :clean&#93;
+
+Install the application bundle in the simulator.
+If `:clean` is set to 1 (or passed via clean=1 ) the application will be removed and then reinstalled.
+For details on `:target` see *crescentia:run*.
+
+**NOTE:** `:run` does an implicit `:push` if the target is a simulator.
 
 #### crescentia:repl &#91;:target&#93;
 
