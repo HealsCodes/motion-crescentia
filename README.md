@@ -1,6 +1,6 @@
 # motion-crescentia
 
-
+[![Gem Version](https://badge.fury.io/rb/motion-crescentia.svg)](http://badge.fury.io/rb/motion-crescentia)
 
 An easy way to integrate Calabash iOS into RubyMotion projects.
 It was conceived as an alternative to `motion-calabash` since I felt the need for a more recent version of calabash-ios and also since the gem on GitHub didn't receive a lot of love lately.
