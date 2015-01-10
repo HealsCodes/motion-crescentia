@@ -3,7 +3,7 @@ VERSION = '1.0'
 
 Gem::Specification.new do |spec|
   spec.name          = 'motion-crescentia'
-  spec.version       = '0.11.4.5'
+  spec.version       = '0.12.0.0'
   spec.authors       = [ 'René Köcher' ]
   spec.email         = [ 'shirk@bitspin.org' ]
   spec.description   = %q{RubyMotion wrapper for the Calabash BDD framework}
@@ -20,6 +20,6 @@ Gem::Specification.new do |spec|
   spec.files         = files
   spec.require_paths = ['lib']
 
-  spec.add_dependency( 'calabash-cucumber', '0.11.4' )
+  spec.add_dependency( 'calabash-cucumber', '0.12.0' )
   spec.add_development_dependency 'rake'
 end
