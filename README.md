@@ -77,7 +77,19 @@ This task too requires a target specification, see *crescentia:run* for details 
 
 ### providing fixture data
 
-To easily add and remove fixture data in your acceptance tests crescentia provides two functions which can be called from cucumber steps:
+Crescentia provides support for copying fixture data at runtime.
+To enable this feature following line needs to be added to your `ApplicationDelegate`:
+
+```ruby
+    include Crescentia::Fixtures
+```
+
+This will provide the required fixture callbacks in development builds and resolve to an empty stub-module in release builds.
+
+#### Call from inside your Cucumber features / Spec files
+
+To easily add and remove fixture data in your acceptance tests crescentia provides two functions which can be called from cucumber
+features or spec files:
 
 ```ruby
 
@@ -98,16 +110,10 @@ def fixture_remove( path, root )
 end
 ```
 
-These functions make use of the `backdoor()`-API provided by Calabash.
-As the backdoor needs matching methods to call the following line needs to be added to your `ApplicationDelegate`:
+For Cucumber tests these functions make use of the `backdoor()`-API provided by Calabash.
+For Spec runs (only supported in the simulator) a direct call without `backdoor()` is performed.
 
-```ruby
-    include Crescentia::Fixtures
-```
-
-This will provide the required fixture callbacks in development builds and resolve to an empty stub-module in release builds.
-
-#### sample step definition
+##### sample step definition (Cucumber)
 
 ```ruby
 
@@ -125,6 +131,26 @@ Given /^I work an a clean slate$/ do
   # Remove the 'files' directory and all it's contents.
   fixture_remove( 'files', :NSDocumentDirectory )
 end
+```
+
+##### sample step definition (RSpec)
+
+```ruby
+
+describe 'My sample view controller' do
+  context 'when there is data available' do
+    before do
+      # Copy recursively the folder 'spec/data/fixture-data' to the simulator under the name 'files'
+      fixture_install( fixture_host_path( 'spec', 'data', 'fixture-data' ), 'files', :NSDocumentDirectory )
+    end
+
+    after do
+      # Remove the 'files' directory and all it's contents.
+      fixture_remove( 'files', :NSDocumentDirectory )
+    end
+  end
+end
+
 ```
 
 ## Contributing

@@ -12,6 +12,8 @@ Motion::Project::App.setup do |app|
     app.vendor_project( File.join( lib_directory, 'vendor', 'calabash-ios-server' ), :static )
     # Inject fixture_* helpers module
     app.files << File.join( lib_directory, 'motion', 'project', 'crescentia-fixtures.rb' )
+    # Inject a reference to the source directory into Info.plist
+    app.info_plist['SPEC_HOST_PATH'] = File.absolute_path( Dir.pwd )
   end
 
   app.release do
@@ -109,12 +111,23 @@ namespace :crescentia do
 
   desc 'Setup features directory for this project.'
   task :setup do
-    App.info( 'Run', 'Creating Calabash-iOS directories..' )
-    sh 'echo | calabash-ios gen >/dev/null', :verbose => false
+    unless File.exists? File.join( 'features', 'support', '02_pre_stop_hooks.rb' )
+      App.info( 'Run', 'Creating Calabash-iOS directories..' )
+      sh 'echo | calabash-ios gen >/dev/null', :verbose => false
+    else
+      App.warn( 'It looks like this project already contains a Calabash-iOS setup.' )
+      App.warn( 'So I won\'t run calabash-ios again.' )
+      App.warn( 'If this is an error try to remove the existing features/support directory.' )
+    end
 
     App.info( 'Run', 'Copying Crescentia additions..' )
+    mkdir_p( File.join( 'features', 'support' ), :verbose => false )
     cp( File.join( lib_directory, 'motion', 'project', 'crescentia_support.rb' ),
         File.join( 'features', 'support', '03_crescentia_support.rb' ), :verbose => false )
+
+    mkdir_p( File.join( 'spec', 'helpers' ), :verbose => false )
+    cp( File.join( lib_directory, 'motion', 'project', 'crescentia_spec_support.rb' ),
+        File.join( 'spec', 'helpers', 'crescentia_spec_support.rb' ), :verbose => false )
 
     App.info( 'Run', 'run crescentia:run to test your setup' )
   end
