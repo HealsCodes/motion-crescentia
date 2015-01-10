@@ -44,7 +44,6 @@ module Crescentia
     # @option file_spec [Symbol] :root One of the keys defined in
     #         {NSSearchPathDirectory}, if empty defaults to +:NSDocumentDirectory+.
     def fixture_remove_file( file_spec )
-      NSLog 'Entry'
       file_manager = NSFileManager.defaultManager
 
       if file_spec.has_key? :path
@@ -62,7 +61,7 @@ module Crescentia
 
         file_url = base_url.URLByAppendingPathComponent( file_path, isDirectory: false )
 
-        puts "fixture_remove: #{file_url.absoluteString}"
+        #puts "fixture_remove: #{file_url.absoluteString}"
         file_manager.removeItemAtURL( file_url, error: nil )
         true
       end
