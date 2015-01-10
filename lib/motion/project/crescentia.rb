@@ -38,7 +38,7 @@ namespace :crescentia do
       if bundle_path.nil?
         App.fail 'No Simulator build available, please run rake build:simulator first!'
       else
-        env['APP_BUNDLE_PATH'] = bundle_path
+        env['APP_BUNDLE_PATH'] = File.join( File.absolute_path( Dir.pwd ), bundle_path )
       end
     end
 
