@@ -66,14 +66,26 @@ namespace :crescentia do
 
   # Lookup the UUID matching the specified device name
   def lookup_uuid( device_name )
+    /\(([[:xdigit:]]{8}(?:-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12})\)/.match( device_name ) do |match|
+      return match[1]
+    end
+
+    uuid_matches = []
     App.info( 'Run', "Fetching the UUID for '#{device_name}'" )
     `instruments -s devices`.split( /\n/ ).grep( /\[[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}\]/ ).each do |device|
       name, uuid = device.split( /[\[\]]/ ).map{ |n| n.strip }
-      if device_name == name
-        return uuid
-      end
+      uuid_matches << uuid if device_name == name
     end
-    return nil
+    return nil if uuid_matches.empty?
+
+    if uuid_matches.size > 1
+      App.warn( "There is more than one simulator named '#{device_name}':" )
+      uuid_matches.each { |uuid| App.warn( "  '#{device_name} [#{uuid}]'" ) }
+      App.warn( 'This will break things please consider removing / renaming one of the above devices!' )
+      return nil
+    end
+
+    uuid_matches.first
   end
 
   # Use +simctl+ to deploy the application on the simulator.
