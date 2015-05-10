@@ -20,6 +20,6 @@ Gem::Specification.new do |spec|
   spec.files         = files
   spec.require_paths = ['lib']
 
-  spec.add_dependency( 'calabash-cucumber', '0.12.0' )
+  spec.add_dependency( 'calabash-cucumber', '0.14.1' )
   spec.add_development_dependency 'rake'
 end
